@@ -13,6 +13,7 @@ td {
     position: relative; /* position is relative so we will be able to add the position marks */
     background-repeat: no-repeat;
     background-position: center;
+    background-size: 60px;
     transition: 0.15s;
 
     height: 80px;
@@ -85,6 +86,7 @@ td:hover {
     transform: translate(-50%, -50%);
 }
 
+/* TODO: combine the blackmove and whitemove and change the colors through js? because its mostly the same*/
 .blackMove {
     position: absolute;
     bottom: 4%;
