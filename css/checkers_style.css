@@ -1,0 +1,131 @@
+table {
+    outline: 5px solid black;
+    outline-offset: -2px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0px 0px 10px black);
+}
+
+td {
+    display: flex;
+    position: relative; /* position is relative so we will be able to add the position marks */
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: 0.15s;
+
+    height: 80px;
+    width: 80px;
+}
+
+tr {
+    display: flex;
+}
+
+.lightSquare {
+    background-color: #ebecd0;
+}
+
+.darkSquare {
+    background-color: #779556;
+}
+
+.selected {
+    z-index: 2;
+    background-color: orange;
+    outline: 2px solid black;
+    outline-offset: -2px;
+    filter: drop-shadow(0px 0px 1px black);
+    transform: scale(1.05);
+}
+
+.moveSpot {
+    z-index: 1;
+    outline: 3px dashed gold;
+    outline-offset: -25px;
+}
+
+.eatSpot {
+    z-index: 1;
+    outline: 3px dashed red;
+    outline-offset: -25px;
+}
+
+td:hover {
+    z-index: 3;
+    outline: 2px solid black;
+    filter: drop-shadow(0px 0px 5px black);
+    outline-offset: -2px;
+    transform: scale(1.1);
+}
+
+.winnerPopup {
+    z-index: 4;
+    width: max-content;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 8%;
+    padding: 40px;
+    font-size: 35px;
+    font-weight: bold;
+    border: 3px solid #5b7242;
+    background-color: #759556e5;
+    filter: drop-shadow(0px 0px 70px black);
+}
+
+.topHeader {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    color: #485c36;
+    font-size: 50px;
+    transform: translate(-50%, -50%);
+}
+
+.blackMove {
+    position: absolute;
+    bottom: 4%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 8%;
+    padding: 8px;
+    border: 3px solid #5b7242;
+    color: black;
+    background-color: #75955698;
+}
+
+.whiteMove {
+    position: absolute;
+    bottom: 4%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 8%;
+    padding: 8px;
+    border: 3px solid #5b7242;
+    color: white;
+    background-color: #75955698;
+}
+
+.positionElementLetter {
+    position: absolute;
+    right: 5px;
+    bottom: 50%;
+    color: rgb(196, 196, 196);
+}
+
+.positionElementNumber {
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    color: rgb(196, 196, 196);
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #b0d488;
+}
+
+
