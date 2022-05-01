@@ -34,6 +34,9 @@ function clickedTD(event, x, y) {
                 if(prevMoves[1][i] == x && prevMoves[1][i+1] == y) {
                     boardData.eatPiece(prevSelectedPiece, x, y);
                     colorSelected = false;
+                    if(boardData.countPiecesByColor(!prevSelectedPiece.isWhite) === 0) {
+                        game.finishGame();
+                    }
                 }
             }
 

@@ -96,6 +96,20 @@ class Game {
             //paint possible moves for selected piece
             this.showMoves(x, y);
         }
-    
+    }
+
+    finishGame() {
+        this.boardData.winner = true;
+        const table = document.getElementById("checkers_table");
+        const winnerPopup = document.createElement('div');
+        table.appendChild(winnerPopup);
+        winnerPopup.classList.add("winnerPopup");
+        if(!this.boardData.isWhiteTurn) { //opposite because the turn is switched after moving
+            winnerPopup.innerText = "White is the winner!";
+            winnerPopup.style.color = "white";
+        } else {
+            winnerPopup.innerText = "Black is the winner!";
+            winnerPopup.style.color = "black";
+        }
     }
 }

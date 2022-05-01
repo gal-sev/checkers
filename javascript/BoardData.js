@@ -40,20 +40,30 @@ class BoardData {
         }
     }
 
-    eatPiece(lastSelectedPiece, x, y) {
-        const directionToEat = this.calcDirection(lastSelectedPiece, x, y);
+    eatPiece(prevSelectedPiece, x, y) {
+        const directionToEat = this.calcDirection(prevSelectedPiece, x, y);
         this.removePiece(this.getPiece(x + directionToEat[0], y + directionToEat[1]));
-        this.movePiece(lastSelectedPiece, x, y);
+        this.movePiece(prevSelectedPiece, x, y);
     }
 
-    movePiece(lastSelectedPiece, x, y) {
+    countPiecesByColor(isWhite) {
+        let counter = 0;
+        for (const piece of this.pieces) {
+            if(piece.isWhite === isWhite) {
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    movePiece(prevSelectedPiece, x, y) {
         //TODO:add multi eat option
         this.changeTurn();
-        lastSelectedPiece.x = x;
-        lastSelectedPiece.y = y;
+        prevSelectedPiece.x = x;
+        prevSelectedPiece.y = y;
         //promote the piece to a queen
-        if((lastSelectedPiece.isWhite && y === 0) || (!lastSelectedPiece.isWhite && y === 7)) {
-            lastSelectedPiece.isQueen = true;
+        if((prevSelectedPiece.isWhite && y === 0) || (!prevSelectedPiece.isWhite && y === 7)) {
+            prevSelectedPiece.isQueen = true;
         }
     }
 
@@ -105,5 +115,4 @@ class BoardData {
             
         }
     }
-
 }
