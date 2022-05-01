@@ -56,6 +56,19 @@ class BoardData {
         return counter;
     }
 
+    teamCanMove(isWhite) {
+        for (const piece of this.pieces) {
+            if(piece.isWhite === isWhite) {
+                for (const move of piece.possibleMoves(this.pieces)) {
+                    if(move.length > 0) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     movePiece(prevSelectedPiece, x, y) {
         //TODO:add multi eat option
         this.changeTurn();

@@ -64,7 +64,6 @@ class Piece {
                     return 2;
             }
         } else {
-            // console.log((this.x + x_move) + " " + (this.y + y_move) + " position out of bounds");
             return 2;
         }
     }
@@ -113,6 +112,7 @@ class Piece {
     }
 
     getQueenPosMoves(pieces, movesPos, eatPos) {
+        //leaving ifs here for performance but it will work without them too
         if(this.y < 7 && this.x < 7) {
             // +x +y (diag down right)
             this.getMovesInDirection(Math.min(8 - this.x, 8 - this.y), 1, 1, pieces, movesPos, eatPos);
