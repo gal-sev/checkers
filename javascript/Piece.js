@@ -20,8 +20,6 @@ class Piece {
         }
     }
 
-    //TODO: make the moves checkers like so you can press the cell behind the piece to eat it instead of the chess way
-    //TODO: change the cell check so if you find an enemy cell search the one behind and if not put move spot
     possibleMoves(pieces) {
         let movesPos = [];
         let eatPos = [];
@@ -29,6 +27,10 @@ class Piece {
             this.getQueenPosMoves(pieces, movesPos, eatPos);
         } else {
             this.getPawnsPosMoves(pieces, movesPos, eatPos);
+        }
+
+        if(eatPos.length > 0) {
+            movesPos = []; //empty the possible moves so the player could only eat
         }
 
         return [movesPos, eatPos];

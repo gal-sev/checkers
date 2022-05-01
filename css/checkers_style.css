@@ -53,7 +53,7 @@ tr {
     outline-offset: -25px;
 }
 
-td:hover {
+.darkSquare:hover {
     z-index: 3;
     outline: 2px solid black;
     filter: drop-shadow(0px 0px 5px black);

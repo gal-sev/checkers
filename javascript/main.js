@@ -9,7 +9,6 @@ function mainFunc() {
 }
 
 function clickedTD(event, x, y) {
-    //TODO: add a game finish
     //TODO: think of a way to change the click handling to something nicer?
     let colorSelected = true;
     let prevSelectedPiece = boardData.getPiece(boardData.selected[1], boardData.selected[2]);

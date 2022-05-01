@@ -27,9 +27,10 @@ class Game {
                     positionElement.classList.add('positionElementNumber');
                     td.appendChild(positionElement);
                 }
-                td.onclick = (e) => {clickedTD(e, j, i)};
+                
                 if ((j + i) % 2 != 0) {
                     td.className = "darkSquare";
+                    td.onclick = (e) => {clickedTD(e, j, i)};
                 } else {
                     td.className = "lightSquare";
                 }
