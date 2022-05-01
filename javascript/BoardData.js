@@ -51,6 +51,10 @@ class BoardData {
         this.changeTurn();
         lastSelectedPiece.x = x;
         lastSelectedPiece.y = y;
+        //promote the piece to a queen
+        if((lastSelectedPiece.isWhite && y === 0) || (!lastSelectedPiece.isWhite && y === 7)) {
+            lastSelectedPiece.isQueen = true;
+        }
     }
 
     getMoves(x, y) {
@@ -90,7 +94,7 @@ class BoardData {
             for (let line = 0; line < 3; line++) {
                 if(line % 2 === 0) {
                     for (let j = 1 - i; j < 8; j= j + 2) {
-                        this.pushPiece(j, i * 5 + line, true, i !== 0);
+                        this.pushPiece(j, i * 5 + line, false, i !== 0);
                     }
                 } else {
                     for (let j = 0 + i; j < 8; j= j + 2) {

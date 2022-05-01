@@ -81,16 +81,7 @@ class Piece {
         return 0; //empty
     }
 
-    getNeighborMovesInDirection(x_multiplier, y_multiplier, pieces, movesPos, eatPos) {
-        //x,y multipliers => -1 = move negative | 0 = dont move | 1 = move positive
-        //if there's an eatable piece:
-        if(this.detectionHandler(pieces, movesPos, eatPos, false , x_multiplier, y_multiplier) === 1) {
-            //place an eatPos behind it if possible
-            this.detectionHandler(pieces, movesPos, eatPos, true, x_multiplier + 1 * x_multiplier, y_multiplier + 1 * y_multiplier);
-        }
-    }
-
-    getFullMovesInDirection(loop_length, x_multiplier, y_multiplier, pieces, movesPos, eatPos) {
+    getMovesInDirection(loop_length, x_multiplier, y_multiplier, pieces, movesPos, eatPos) {
         //x,y multipliers => -1 = move negative | 0 = dont move | 1 = move positive
         let foundFood = false;
         for (let i = 1; i < loop_length; i++) {
@@ -110,33 +101,33 @@ class Piece {
     getPawnsPosMoves(pieces, movesPos, eatPos) {
         if(this.isWhite) {
             // -x -y (diag up left)
-            this.getNeighborMovesInDirection(-1, -1, pieces, movesPos, eatPos);
+            this.getMovesInDirection(2, -1, -1, pieces, movesPos, eatPos);
             // -x -y (diag up right)
-            this.getNeighborMovesInDirection(1, -1, pieces, movesPos, eatPos);
+            this.getMovesInDirection(2, 1, -1, pieces, movesPos, eatPos);
         } else {
             // +x +y (diag down right)
-            this.getNeighborMovesInDirection(1, 1, pieces, movesPos, eatPos);
+            this.getMovesInDirection(2, 1, 1, pieces, movesPos, eatPos);
             // -x +y (diag down left)
-            this.getNeighborMovesInDirection(-1, 1, pieces, movesPos, eatPos);
+            this.getMovesInDirection(2, -1, 1, pieces, movesPos, eatPos);
         }
     }
 
     getQueenPosMoves(pieces, movesPos, eatPos) {
         if(this.y < 7 && this.x < 7) {
             // +x +y (diag down right)
-            this.getFullMovesInDirection(Math.min(8 - this.x, 8 - this.y), 1, 1, pieces, movesPos, eatPos);
+            this.getMovesInDirection(Math.min(8 - this.x, 8 - this.y), 1, 1, pieces, movesPos, eatPos);
         }
         if(this.y < 7 && this.x > 0) {
             // -x +y (diag down left)
-            this.getFullMovesInDirection(Math.min(this.x, 8 - (this.y+1)) + 1, -1, 1, pieces, movesPos, eatPos);
+            this.getMovesInDirection(Math.min(this.x, 8 - (this.y+1)) + 1, -1, 1, pieces, movesPos, eatPos);
         }
         if(this.y > 0 && this.x > 0) {
             // -x -y (diag up left)
-            this.getFullMovesInDirection(Math.min(this.x, this.y) + 1, -1, -1, pieces, movesPos, eatPos);
+            this.getMovesInDirection(Math.min(this.x, this.y) + 1, -1, -1, pieces, movesPos, eatPos);
         }
         if(this.y > 0 && this.x < 7) {
             // -x -y (diag up right)
-            this.getFullMovesInDirection(Math.min(8 - this.x, this.y+1), 1, -1, pieces, movesPos, eatPos);
+            this.getMovesInDirection(Math.min(8 - this.x, this.y+1), 1, -1, pieces, movesPos, eatPos);
         }
     }
 }
