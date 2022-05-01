@@ -24,12 +24,30 @@ class BoardData {
         this.pieces.splice(this.pieces.indexOf(pieceToRemove), 1);
     }
 
-    eatPiece(lastSelectedPiece, selectedPiece, x, y) {
-        this.removePiece(selectedPiece);
+    //returns general direction between two positions on the same plane
+    calcDirection(lastSelectedPiece, x, y) {
+        return [this.calcAxisGeneralDir(lastSelectedPiece.x, x), this.calcAxisGeneralDir(lastSelectedPiece.y, y)];
+    }
+
+    //returns the general direction between two positions on the same axis
+    calcAxisGeneralDir(prev_x, x) {
+        if(prev_x - x > 0) {
+            return 1;
+        } else if(prev_x - x < 0) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+    eatPiece(lastSelectedPiece, x, y) {
+        const directionToEat = this.calcDirection(lastSelectedPiece, x, y);
+        this.removePiece(this.getPiece(x + directionToEat[0], y + directionToEat[1]));
         this.movePiece(lastSelectedPiece, x, y);
     }
 
     movePiece(lastSelectedPiece, x, y) {
+        //TODO:add multi eat option
         this.changeTurn();
         lastSelectedPiece.x = x;
         lastSelectedPiece.y = y;

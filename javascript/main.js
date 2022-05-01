@@ -32,7 +32,7 @@ function clickedTD(event, x, y) {
             //check if clicked spot is a eat spot
             for (let i = 0; i < prevMoves[1].length; i+=2) {
                 if(prevMoves[1][i] == x && prevMoves[1][i+1] == y) {
-                    boardData.eatPiece(prevSelectedPiece, selectedPiece, x, y);
+                    boardData.eatPiece(prevSelectedPiece, x, y);
                     colorSelected = false;
                 }
             }
