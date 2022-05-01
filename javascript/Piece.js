@@ -81,16 +81,28 @@ class Piece {
         return 0; //empty
     }
 
-    getMovesInDirection(loop_length, x_multiplier, y_multiplier, pieces, movesPos, eatPos) {
+    getNeighborMovesInDirection(x_multiplier, y_multiplier, pieces, movesPos, eatPos) {
         //x,y multipliers => -1 = move negative | 0 = dont move | 1 = move positive
-        for (let i = 1; i < loop_length; i++) { 
-            const detection = this.detectionHandler(pieces, movesPos, eatPos, false , i * x_multiplier, i * y_multiplier);
+        //if there's an eatable piece:
+        if(this.detectionHandler(pieces, movesPos, eatPos, false , x_multiplier, y_multiplier) === 1) {
+            //place an eatPos behind it if possible
+            this.detectionHandler(pieces, movesPos, eatPos, true, x_multiplier + 1 * x_multiplier, y_multiplier + 1 * y_multiplier);
+        }
+    }
+
+    getFullMovesInDirection(loop_length, x_multiplier, y_multiplier, pieces, movesPos, eatPos) {
+        //x,y multipliers => -1 = move negative | 0 = dont move | 1 = move positive
+        let foundFood = false;
+        for (let i = 1; i < loop_length; i++) {
+            const detection = this.detectionHandler(pieces, movesPos, eatPos, foundFood , i * x_multiplier, i * y_multiplier);
             if(detection === 2) {
                 break;
             } else if(detection === 0 && !this.isQueen) { //if its not a queen its a move spot
                 break;
-            } else {
-                this.detectionHandler(pieces, movesPos, eatPos, true, i * x_multiplier + 1 * x_multiplier, i * y_multiplier + 1 * y_multiplier);
+            } else if(detection === 1 && !foundFood) {
+                foundFood = true;
+                this.detectionHandler(pieces, movesPos, eatPos, foundFood, i * x_multiplier + 1 * x_multiplier, i * y_multiplier + 1 * y_multiplier);
+                break;
             }
         }
     }
@@ -98,34 +110,33 @@ class Piece {
     getPawnsPosMoves(pieces, movesPos, eatPos) {
         if(this.isWhite) {
             // -x -y (diag up left)
-            this.getMovesInDirection(2, -1, -1, pieces, movesPos, eatPos);
+            this.getNeighborMovesInDirection(-1, -1, pieces, movesPos, eatPos);
             // -x -y (diag up right)
-            this.getMovesInDirection(2, 1, -1, pieces, movesPos, eatPos);
+            this.getNeighborMovesInDirection(1, -1, pieces, movesPos, eatPos);
         } else {
             // +x +y (diag down right)
-            this.getMovesInDirection(2, 1, 1, pieces, movesPos, eatPos);
+            this.getNeighborMovesInDirection(1, 1, pieces, movesPos, eatPos);
             // -x +y (diag down left)
-            this.getMovesInDirection(2, -1, 1, pieces, movesPos, eatPos);
+            this.getNeighborMovesInDirection(-1, 1, pieces, movesPos, eatPos);
         }
     }
 
-    //TODO: fix
     getQueenPosMoves(pieces, movesPos, eatPos) {
         if(this.y < 7 && this.x < 7) {
             // +x +y (diag down right)
-            this.getMovesInDirection(Math.min(8 - this.x, 8 - this.y), 1, 1, pieces, movesPos, eatPos);
+            this.getFullMovesInDirection(Math.min(8 - this.x, 8 - this.y), 1, 1, pieces, movesPos, eatPos);
         }
         if(this.y < 7 && this.x > 0) {
             // -x +y (diag down left)
-            this.getMovesInDirection(Math.min(this.x, 8 - (this.y+1)) + 1, -1, 1, pieces, movesPos, eatPos);
+            this.getFullMovesInDirection(Math.min(this.x, 8 - (this.y+1)) + 1, -1, 1, pieces, movesPos, eatPos);
         }
         if(this.y > 0 && this.x > 0) {
             // -x -y (diag up left)
-            this.getMovesInDirection(Math.min(this.x, this.y) + 1, -1, -1, pieces, movesPos, eatPos);
+            this.getFullMovesInDirection(Math.min(this.x, this.y) + 1, -1, -1, pieces, movesPos, eatPos);
         }
         if(this.y > 0 && this.x < 7) {
             // -x -y (diag up right)
-            this.getMovesInDirection(Math.min(8 - this.x, this.y+1), 1, -1, pieces, movesPos, eatPos);
+            this.getFullMovesInDirection(Math.min(8 - this.x, this.y+1), 1, -1, pieces, movesPos, eatPos);
         }
     }
 }
