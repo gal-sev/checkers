@@ -101,21 +101,6 @@ class BoardData {
         return output;
     }
 
-    changeTurn() {
-        if(this.isWhiteTurn) {
-            const turn_display = document.getElementById("turn_display");
-            turn_display.innerText = "Black's Move";
-            turn_display.classList.add('blackMove');
-            turn_display.classList.remove('whiteMove');
-        } else {
-            const turn_display = document.getElementById("turn_display");
-            turn_display.innerText = "White's Move";
-            turn_display.classList.add('whiteMove');
-            turn_display.classList.remove('blackMove');
-        }
-        this.isWhiteTurn = !this.isWhiteTurn;
-    }
-
     placePieces() {
         /* i loop is to generate the black and white separately
         line loop is to generate the the pieces in 3 lines with an order based on the line
@@ -135,5 +120,9 @@ class BoardData {
             }
             
         }
+    }
+
+    changeTurn() {
+        this.isWhiteTurn = !this.isWhiteTurn;
     }
 }

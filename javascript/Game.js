@@ -89,7 +89,9 @@ class Game {
     
         //repaint the whole board
         this.repaintBoard();
-    
+        
+        this.updateTurnDisplay();
+        
         if(paintSelected) {
             //color the current selected pixel
             currentTarget.classList.add('selected');
@@ -111,6 +113,34 @@ class Game {
         } else {
             winnerPopup.innerText = "Black is the winner!";
             winnerPopup.style.color = "black";
+        }
+    }
+
+    updateTurnDisplay() {
+        if(this.boardData.keepPieceEating !== undefined) {
+            if(this.boardData.isWhiteTurn) {
+                const turn_display = document.getElementById("turn_display");
+                turn_display.innerText = "Black's Extra Move";
+                turn_display.classList.add('blackMove');
+                turn_display.classList.remove('whiteMove');
+            } else {
+                const turn_display = document.getElementById("turn_display");
+                turn_display.innerText = "White's Extra Move";
+                turn_display.classList.add('whiteMove');
+                turn_display.classList.remove('blackMove');
+            }
+        } else {
+            if(!this.boardData.isWhiteTurn) {
+                const turn_display = document.getElementById("turn_display");
+                turn_display.innerText = "Black's Move";
+                turn_display.classList.add('blackMove');
+                turn_display.classList.remove('whiteMove');
+            } else {
+                const turn_display = document.getElementById("turn_display");
+                turn_display.innerText = "White's Move";
+                turn_display.classList.add('whiteMove');
+                turn_display.classList.remove('blackMove');
+            }
         }
     }
 }

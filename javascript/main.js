@@ -31,7 +31,6 @@ function clickedTD(event, x, y) {
         if(colorSelected) {
             //remove keepPieceEating
             boardData.keepPieceEating = undefined;
-            boardData.changeTurn();
         }
 
         //check if there is no moves / pieces for the opposite color
