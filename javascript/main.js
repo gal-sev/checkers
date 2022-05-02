@@ -34,7 +34,7 @@ function clickedTD(event, x, y) {
 
         //check if there is no moves / pieces for the opposite color
         if(boardData.countPiecesByColor(!prevSelectedPiece.isWhite) === 0 || !boardData.teamCanMove(!prevSelectedPiece.isWhite)) {
-            game.finishGame();
+            game.finishGame(prevSelectedPiece.isWhite);
         }
     }   //try to move the piece if there was selection before & there isnt a winner
     else if (boardData.selected.length !== 0 && !boardData.winner) {
@@ -62,7 +62,7 @@ function clickedTD(event, x, y) {
 
             //check if there is no moves / pieces for the opposite color
             if(boardData.countPiecesByColor(!prevSelectedPiece.isWhite) === 0 || !boardData.teamCanMove(!prevSelectedPiece.isWhite)) {
-                game.finishGame();
+                game.finishGame(prevSelectedPiece.isWhite);
             }
         }
     }

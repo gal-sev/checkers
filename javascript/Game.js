@@ -104,13 +104,14 @@ class Game {
         }
     }
 
-    finishGame() {
+    finishGame(isWhiteWinner) {
         this.boardData.winner = true;
         const table = document.getElementById("checkers_table");
         const winnerPopup = document.createElement('div');
         table.appendChild(winnerPopup);
         winnerPopup.classList.add("winnerPopup");
-        if(!this.boardData.isWhiteTurn) { //opposite because the turn is switched after moving
+
+        if(isWhiteWinner) { //opposite because the turn is switched after moving
             winnerPopup.innerText = "White is the winner!";
             winnerPopup.style.color = "white";
         } else {
@@ -128,22 +129,24 @@ class Game {
         table.rows[y].cells[x].classList.add('selected');
         table.rows[y2].cells[x2].classList.add('selected');
 
+        //reset the selectors when at end of board
         if(x === 7 && y === 7) {
             x2 = 7;
             y2 = 7;
             x = 0;
             y = 0;
         }
-        if(x < 7) {
+        if(x < 7) { //continue in x direction
             x2--;
             x++;
-        } else {
+        } else { //continue in y direction, reset x
             x2 = 7;
             x = 0;
             y++;
             y2--;
         }
 
+        //call the same function with a timeout
         setTimeout(() => {this.animateTable(game, x, y, x2, y2);}, 80);
     }
 
