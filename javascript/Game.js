@@ -3,7 +3,6 @@ class Game {
         this.boardData = new BoardData(isWhiteFirst);
     }
 
-    //TODO: gray out images when its not their turn
     createTable(numOfRows, numOfColumns) {
         const body = document.body;
         const table = document.createElement('table');
@@ -88,9 +87,8 @@ class Game {
     }
 
     finishFrame(currentTarget, paintSelected, x, y) {
-        this.boardData.selected[0] = currentTarget; //TODO: still using?
-        this.boardData.selected[1] = x;
-        this.boardData.selected[2] = y;
+        this.boardData.selected[0] = x;
+        this.boardData.selected[1] = y;
     
         //repaint the whole board
         this.repaintBoard();

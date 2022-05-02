@@ -11,11 +11,11 @@ function mainFunc() {
 function clickedTD(event, x, y) {
     //TODO: try to improve click handling again?
     let colorSelected = true;
-    let prevSelectedPiece = boardData.getPiece(boardData.selected[1], boardData.selected[2]);
+    let prevSelectedPiece = boardData.getPiece(boardData.selected[0], boardData.selected[1]);
     let selectedPiece = boardData.getPiece(x, y);
     //get moves of previous select
     //TODO: move prevMoves into a variable in boardData so you wont need to call the func again?
-    let prevMoves = boardData.getMoves(boardData.selected[1], boardData.selected[2]);
+    let prevMoves = boardData.getMoves(boardData.selected[0], boardData.selected[1]);
 
     //if last piece can keep eating
     if(boardData.keepPieceEating !== undefined) {
