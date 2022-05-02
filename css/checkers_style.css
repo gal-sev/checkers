@@ -32,19 +32,6 @@ tr {
     background-color: #779556;
 }
 
-.imgNormal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    height: 70px;
-    width: 70px;
-}
-
-.imgGrayedOut {
-    filter: invert(15%);
-}
-
 .selected {
     z-index: 2;
     background-color: orange;
@@ -64,6 +51,10 @@ tr {
     z-index: 1;
     outline: 3px dashed red;
     outline-offset: -25px;
+}
+
+.dangerSpot {
+    box-shadow: inset 0 0 35px red;
 }
 
 .darkSquare:hover {

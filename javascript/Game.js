@@ -3,6 +3,7 @@ class Game {
         this.boardData = new BoardData(isWhiteFirst);
     }
 
+    //TODO: gray out images when its not their turn
     createTable(numOfRows, numOfColumns) {
         const body = document.body;
         const table = document.createElement('table');
@@ -51,31 +52,18 @@ class Game {
                 table.rows[y].cells[x].classList.remove('selected');
                 table.rows[y].cells[x].classList.remove('moveSpot');
                 table.rows[y].cells[x].classList.remove('eatSpot');
+                table.rows[y].cells[x].classList.remove('dangerSpot');
                 table.rows[y].cells[x].style.backgroundImage = "";
-                table.rows[y].cells[x].innerHTML = "";
             }
         }
-
         this.placePictures();
-
     }
 
     placePictures() {
         const table = document.getElementById("checkers_table");
         this.boardData.pieces.forEach(piece => {
-            let img = document.createElement('img');
-            img.src = "assets/" + piece.getImg() + ".png";
-            img.classList.add("imgNormal");
-            if(this.boardData.isWhiteTurn !== piece.isWhite) {
-                img.classList.add("imgGrayedOut");
-            }
-            table.rows[piece.y].cells[piece.x].appendChild(img);
-        });
-
-        /*const table = document.getElementById("checkers_table");
-        this.boardData.pieces.forEach(piece => {
             table.rows[piece.y].cells[piece.x].style.backgroundImage = "url(assets/" + piece.getImg() + ".png)";
-        });*/
+        });
     }
 
     showMoves(x, y) {
@@ -92,12 +80,15 @@ class Game {
             // eat moves
             for (let i = 0; i < posMoves[1].length; i+=2) {
                 table.rows[posMoves[1][i + 1]].cells[posMoves[1][i]].classList.add('eatSpot');
+                //calc direction from click to move post to mark the spot between
+                const directionToEat = this.boardData.calcDirection(this.boardData.getPiece(x, y), posMoves[1][i], posMoves[1][i + 1]);
+                table.rows[posMoves[1][i + 1] + directionToEat[1]].cells[posMoves[1][i] + directionToEat[0]].classList.add('dangerSpot');
             }
         }
     }
 
     finishFrame(currentTarget, paintSelected, x, y) {
-        this.boardData.selected[0] = currentTarget;
+        this.boardData.selected[0] = currentTarget; //TODO: still using?
         this.boardData.selected[1] = x;
         this.boardData.selected[2] = y;
     
@@ -138,7 +129,6 @@ class Game {
                 turn_display.classList.add('blackTurnDisplay');
                 turn_display.classList.remove('whiteTurnDisplay');
             } else {
-                
                 turn_display.innerText = "White's Extra Move";
                 turn_display.classList.add('whiteTurnDisplay');
                 turn_display.classList.remove('blackTurnDisplay');

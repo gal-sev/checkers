@@ -53,10 +53,6 @@ class Piece {
                     }
                     return 0;
                 case 1:
-                    //TODO: mark the eatable piece like this probably?:
-                    // if(!canEat) {
-                    //     this.pushPos(markedPos, x_move, y_move);
-                    // }
                     //returns 1 because its an eatable piece
                     return 1;
                 case 2:
