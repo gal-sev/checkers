@@ -39,6 +39,9 @@ class Game {
 
         //place pieces pictures on the table
         this.placePictures();
+
+        //update the turn display based on who's first
+        this.updateTurnDisplay();
     }
 
     repaintBoard() {
@@ -91,7 +94,7 @@ class Game {
         this.repaintBoard();
         
         this.updateTurnDisplay();
-        
+
         if(paintSelected) {
             //color the current selected pixel
             currentTarget.classList.add('selected');
@@ -117,29 +120,27 @@ class Game {
     }
 
     updateTurnDisplay() {
+        const turn_display = document.getElementById("turn_display");
         if(this.boardData.keepPieceEating !== undefined) {
             if(this.boardData.isWhiteTurn) {
-                const turn_display = document.getElementById("turn_display");
                 turn_display.innerText = "Black's Extra Move";
-                turn_display.classList.add('blackMove');
-                turn_display.classList.remove('whiteMove');
+                turn_display.classList.add('blackTurnDisplay');
+                turn_display.classList.remove('whiteTurnDisplay');
             } else {
-                const turn_display = document.getElementById("turn_display");
+                
                 turn_display.innerText = "White's Extra Move";
-                turn_display.classList.add('whiteMove');
-                turn_display.classList.remove('blackMove');
+                turn_display.classList.add('whiteTurnDisplay');
+                turn_display.classList.remove('blackTurnDisplay');
             }
         } else {
             if(!this.boardData.isWhiteTurn) {
-                const turn_display = document.getElementById("turn_display");
                 turn_display.innerText = "Black's Move";
-                turn_display.classList.add('blackMove');
-                turn_display.classList.remove('whiteMove');
+                turn_display.classList.add('blackTurnDisplay');
+                turn_display.classList.remove('whiteTurnDisplay');
             } else {
-                const turn_display = document.getElementById("turn_display");
                 turn_display.innerText = "White's Move";
-                turn_display.classList.add('whiteMove');
-                turn_display.classList.remove('blackMove');
+                turn_display.classList.add('whiteTurnDisplay');
+                turn_display.classList.remove('blackTurnDisplay');
             }
         }
     }

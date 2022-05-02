@@ -86,29 +86,25 @@ tr {
     transform: translate(-50%, -50%);
 }
 
-/* TODO: combine the blackmove and whitemove and change the colors through js? because its mostly the same*/
-.blackMove {
-    position: absolute;
-    bottom: 4%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 8%;
-    padding: 8px;
+.blackTurnDisplay {
     border: 3px solid #5b7242;
     color: black;
     background-color: #75955698;
 }
 
-.whiteMove {
+.whiteTurnDisplay {
+    border: 3px solid #5b7242;
+    color: white;
+    background-color: #75955698;
+}
+
+.turnDisplay {
     position: absolute;
     bottom: 4%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 8%;
     padding: 8px;
-    border: 3px solid #5b7242;
-    color: white;
-    background-color: #75955698;
 }
 
 .positionElementLetter {
