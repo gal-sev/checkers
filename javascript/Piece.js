@@ -20,13 +20,14 @@ class Piece {
         }
     }
 
-    possibleMoves(pieces) {
+    possibleMoves(pieces, isContinuous) {
         let movesPos = [];
         let eatPos = [];
-        if(this.isQueen) {
+        //if here is so queen will be able to eat only nearby on continuous turns
+        if(this.isQueen && !isContinuous) {
             this.getQueenPosMoves(pieces, movesPos, eatPos);
         } else {
-            this.getPawnsPosMoves(pieces, movesPos, eatPos);
+            this.getPawnsPosMoves(pieces, movesPos, eatPos, isContinuous);
         }
 
         if(eatPos.length > 0) {
@@ -99,8 +100,17 @@ class Piece {
         }
     }
 
-    getPawnsPosMoves(pieces, movesPos, eatPos) {
-        if(this.isWhite) {
+    getPawnsPosMoves(pieces, movesPos, eatPos, isContinuous) {
+        if(isContinuous) {
+            // -x -y (diag up left)
+            this.getMovesInDirection(2, -1, -1, pieces, movesPos, eatPos);
+            // -x -y (diag up right)
+            this.getMovesInDirection(2, 1, -1, pieces, movesPos, eatPos);
+            // +x +y (diag down right)
+            this.getMovesInDirection(2, 1, 1, pieces, movesPos, eatPos);
+            // -x +y (diag down left)
+            this.getMovesInDirection(2, -1, 1, pieces, movesPos, eatPos);
+        } else if(this.isWhite) {
             // -x -y (diag up left)
             this.getMovesInDirection(2, -1, -1, pieces, movesPos, eatPos);
             // -x -y (diag up right)

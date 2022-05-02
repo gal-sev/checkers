@@ -5,6 +5,7 @@ class BoardData {
         this.placePieces();
         this.isWhiteTurn = isWhiteFirst;
         this.winner = false;
+        this.keepPieceEating = undefined;
     }
 
     pushPiece(x, y, isQueen, isWhite) {
@@ -44,6 +45,25 @@ class BoardData {
         const directionToEat = this.calcDirection(prevSelectedPiece, x, y);
         this.removePiece(this.getPiece(x + directionToEat[0], y + directionToEat[1]));
         this.movePiece(prevSelectedPiece, x, y);
+        this.keepPieceEating = this.canKeepEating(prevSelectedPiece);
+    }
+
+    canKeepEating(prevSelectedPiece) {
+        //for every move check if piece can eat, if yes then change keepPieceEating
+        let posMoves = this.getMoves(prevSelectedPiece.x, prevSelectedPiece.y, true);
+        if(posMoves.length > 0 && posMoves[1].length > 0) {
+            return prevSelectedPiece;
+        }
+        return undefined;
+    }
+
+    movePiece(prevSelectedPiece, x, y) {
+        prevSelectedPiece.x = x;
+        prevSelectedPiece.y = y;
+        //promote the piece to a queen
+        if((prevSelectedPiece.isWhite && y === 0) || (!prevSelectedPiece.isWhite && y === 7)) {
+            prevSelectedPiece.isQueen = true;
+        }
     }
 
     countPiecesByColor(isWhite) {
@@ -59,7 +79,7 @@ class BoardData {
     teamCanMove(isWhite) {
         for (const piece of this.pieces) {
             if(piece.isWhite === isWhite) {
-                for (const move of piece.possibleMoves(this.pieces)) {
+                for (const move of piece.possibleMoves(this.pieces, false)) {
                     if(move.length > 0) {
                         return true;
                     }
@@ -69,24 +89,12 @@ class BoardData {
         return false;
     }
 
-    movePiece(prevSelectedPiece, x, y) {
-        //TODO:add multi eat option
-        this.changeTurn();
-        prevSelectedPiece.x = x;
-        prevSelectedPiece.y = y;
-        //promote the piece to a queen
-        if((prevSelectedPiece.isWhite && y === 0) || (!prevSelectedPiece.isWhite && y === 7)) {
-            prevSelectedPiece.isQueen = true;
-        }
-    }
-
-    getMoves(x, y) {
+    getMoves(x, y, overrideKeepEating = false) {
         let output = [];
         //get possible moves for piece
         let piece = this.getPiece(x, y);
-
         if(piece != undefined) {
-            piece.possibleMoves(this.pieces).forEach(move => {
+            piece.possibleMoves(this.pieces, this.keepPieceEating !== undefined || overrideKeepEating).forEach(move => {
                 output.push(move);
             });
         }

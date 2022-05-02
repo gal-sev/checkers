@@ -9,30 +9,56 @@ function mainFunc() {
 }
 
 function clickedTD(event, x, y) {
-    //TODO: think of a way to change the click handling to something nicer?
+    //TODO: try to improve click handling again?
     let colorSelected = true;
     let prevSelectedPiece = boardData.getPiece(boardData.selected[1], boardData.selected[2]);
     let selectedPiece = boardData.getPiece(x, y);
+    //get moves of previous select
+    //TODO: move prevMoves into a variable in boardData so you wont need to call the func again?
+    let prevMoves = boardData.getMoves(boardData.selected[1], boardData.selected[2]);
 
-    //try to move the piece if there was selection before & there isnt a winner
-    if (boardData.selected.length !== 0 && !boardData.winner) {
-        //get moves of previous select
-        let prevMoves = boardData.getMoves(boardData.selected[1], boardData.selected[2]);
+    //if last piece can keep eating
+    if(boardData.keepPieceEating !== undefined) {
+        //check if clicked spot is a eat spot
+        for (let i = 0; i < prevMoves[1].length; i+=2) {
+            if(prevMoves[1][i] === x && prevMoves[1][i+1] === y) {
+                boardData.eatPiece(prevSelectedPiece, x, y);
+                colorSelected = false;
+            }
+        }
+
+        //if didnt eat again:
+        if(colorSelected) {
+            //remove keepPieceEating
+            boardData.keepPieceEating = undefined;
+            boardData.changeTurn();
+        }
+
+        //check if there is no moves / pieces for the opposite color
+        if(boardData.countPiecesByColor(!prevSelectedPiece.isWhite) === 0 || !boardData.teamCanMove(!prevSelectedPiece.isWhite)) {
+            game.finishGame();
+        }
+    }   //try to move the piece if there was selection before & there isnt a winner
+    else if (boardData.selected.length !== 0 && !boardData.winner) {
+        //remove keepPieceEating so it wont continue to happen
+        boardData.keepPieceEating = undefined;
 
         //check if last clicked spot wasnt empty & piece color == turn color
         if(prevMoves.length > 0 && prevSelectedPiece.isWhite === boardData.isWhiteTurn) { //check if clicked spot is a move spot
             for (let i = 0; i < prevMoves[0].length; i+=2) {
-                if(prevMoves[0][i] == x && prevMoves[0][i+1] == y) {
+                if(prevMoves[0][i] === x && prevMoves[0][i+1] === y) {
                     boardData.movePiece(prevSelectedPiece, x, y);
                     colorSelected = false;
+                    boardData.changeTurn();
                 }
             }
 
             //check if clicked spot is a eat spot
             for (let i = 0; i < prevMoves[1].length; i+=2) {
-                if(prevMoves[1][i] == x && prevMoves[1][i+1] == y) {
+                if(prevMoves[1][i] === x && prevMoves[1][i+1] === y) {
                     boardData.eatPiece(prevSelectedPiece, x, y);
                     colorSelected = false;
+                    boardData.changeTurn();
                 }
             }
 
@@ -40,30 +66,19 @@ function clickedTD(event, x, y) {
             if(boardData.countPiecesByColor(!prevSelectedPiece.isWhite) === 0 || !boardData.teamCanMove(!prevSelectedPiece.isWhite)) {
                 game.finishGame();
             }
-
-
         }
-        if (selectedPiece !== undefined) {
-            if (selectedPiece.isWhite === boardData.isWhiteTurn) {
-                game.finishFrame(event.currentTarget, colorSelected, x, y);
-            } else {
-                //repaint the whole board
-                game.finishFrame(event.currentTarget, false, x, y);
-            }
-        } else { //if the currentTarget is not containing any piece
+    }
+    //finish updating the board display based on click
+    if(boardData.keepPieceEating !== undefined) {
+        game.finishFrame(event.currentTarget, true, x, y);
+    } else if (selectedPiece !== undefined) {
+        if (selectedPiece.isWhite === boardData.isWhiteTurn) {
             game.finishFrame(event.currentTarget, colorSelected, x, y);
+        } else {
+            //repaint the whole board
+            game.finishFrame(event.currentTarget, false, x, y);
         }
-
-    //if there wasnt a selection before
-    } else if(boardData.selected.length === 0) {
-        if (selectedPiece !== undefined) {
-            if (selectedPiece.isWhite === boardData.isWhiteTurn) {
-                game.finishFrame(event.currentTarget, true, x, y);
-            } else {
-                game.finishFrame(event.currentTarget, false, x, y);
-            }
-        } else { //if the currentTarget is not containing any piece
-            game.finishFrame(event.currentTarget, true, x, y);
-        }
+    } else { //if the currentTarget is not containing any piece
+        game.finishFrame(event.currentTarget, colorSelected, x, y);
     }
 }
