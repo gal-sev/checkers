@@ -117,6 +117,34 @@ class Game {
             winnerPopup.innerText = "Black is the winner!";
             winnerPopup.style.color = "black";
         }
+        this.animateTable(this, 0, 0, 7, 7);
+    }
+
+    animateTable(game, x, y, x2, y2) {
+        //repaint the whole board
+        game.repaintBoard();
+        
+        const table = document.getElementById("checkers_table");
+        table.rows[y].cells[x].classList.add('selected');
+        table.rows[y2].cells[x2].classList.add('selected');
+
+        if(x === 7 && y === 7) {
+            x2 = 7;
+            y2 = 7;
+            x = 0;
+            y = 0;
+        }
+        if(x < 7) {
+            x2--;
+            x++;
+        } else {
+            x2 = 7;
+            x = 0;
+            y++;
+            y2--;
+        }
+
+        setTimeout(() => {this.animateTable(game, x, y, x2, y2);}, 80);
     }
 
     updateTurnDisplay() {
