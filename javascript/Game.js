@@ -3,7 +3,6 @@ class Game {
         this.boardData = new BoardData(isWhiteFirst);
     }
 
-    //TODO: gray out images when its not their turn
     createTable(numOfRows, numOfColumns) {
         const body = document.body;
         const table = document.createElement('table');
@@ -53,6 +52,7 @@ class Game {
                 table.rows[y].cells[x].classList.remove('moveSpot');
                 table.rows[y].cells[x].classList.remove('eatSpot');
                 table.rows[y].cells[x].style.backgroundImage = "";
+                table.rows[y].cells[x].innerHTML = "";
             }
         }
 
@@ -63,8 +63,19 @@ class Game {
     placePictures() {
         const table = document.getElementById("checkers_table");
         this.boardData.pieces.forEach(piece => {
-            table.rows[piece.y].cells[piece.x].style.backgroundImage = "url(assets/" + piece.getImg() + ".png)";
+            let img = document.createElement('img');
+            img.src = "assets/" + piece.getImg() + ".png";
+            img.classList.add("imgNormal");
+            if(this.boardData.isWhiteTurn !== piece.isWhite) {
+                img.classList.add("imgGrayedOut");
+            }
+            table.rows[piece.y].cells[piece.x].appendChild(img);
         });
+
+        /*const table = document.getElementById("checkers_table");
+        this.boardData.pieces.forEach(piece => {
+            table.rows[piece.y].cells[piece.x].style.backgroundImage = "url(assets/" + piece.getImg() + ".png)";
+        });*/
     }
 
     showMoves(x, y) {
