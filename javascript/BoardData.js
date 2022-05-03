@@ -140,9 +140,11 @@ class BoardData {
         }
     }
 
-    isMoveOrEatSpot(x, y, isMove, prevMoves) {
-        for (let i = 0; i < prevMoves[isMove ? 0 : 1].length; i+=2) {
-            if(prevMoves[isMove ? 0 : 1][i] === x && prevMoves[isMove ? 0 : 1][i+1] === y) {
+    //checks if array contains the pos as a move or eat spot (based on isMove)
+    isMoveOrEatSpot(x, y, isMove, MovesArr) {
+        //isMove = true to check for move spots, false to check for eat spots
+        for (let i = 0; i < MovesArr[isMove ? 0 : 1].length; i+=2) {
+            if(MovesArr[isMove ? 0 : 1][i] === x && MovesArr[isMove ? 0 : 1][i+1] === y) {
                 return true;
             }
         }
