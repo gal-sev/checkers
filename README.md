@@ -17,3 +17,5 @@ https://youtu.be/Bml03bAanNg - 11:04s
 (Optional Video) KeepEating Video:
 https://youtu.be/D6jKioEXP_U - 3:30s
 איך האכילה הממושכת עובדת בקוד בכלליות
+
+*Some variables names in functions are diffrent in the videos because I changed them after filming.
