@@ -24,6 +24,19 @@ class BoardData {
     removePiece(pieceToRemove) {
         this.pieces.splice(this.pieces.indexOf(pieceToRemove), 1);
     }
+    
+    changeTurn() {
+        this.isWhiteTurn = !this.isWhiteTurn;
+    }
+
+    setWinner() {
+        this.winner = true;
+    }
+
+    setSelected(x, y) {
+        this.selected[0] = x;
+        this.selected[1] = y;
+    }
 
     //returns general direction between two positions on the same plane
     calcDirection(lastSelectedPiece, x, y) {
@@ -42,14 +55,17 @@ class BoardData {
     }
 
     eatPiece(prevSelectedPiece, x, y) {
+        //remove the eaten piece
         const directionToEat = this.calcDirection(prevSelectedPiece, x, y);
         this.removePiece(this.getPiece(x + directionToEat[0], y + directionToEat[1]));
+        //move the current piece
         this.movePiece(prevSelectedPiece, x, y);
+        //change the keep eating status
         this.keepPieceEating = this.canKeepEating(prevSelectedPiece);
     }
 
     canKeepEating(prevSelectedPiece) {
-        //for every move check if piece can eat, if yes then change keepPieceEating
+        //check if there are possible eat spots, if yes then change keepPieceEating
         let posMoves = this.getMoves(prevSelectedPiece.x, prevSelectedPiece.y, true);
         if(posMoves.length > 0 && posMoves[1].length > 0) {
             return prevSelectedPiece;
@@ -77,9 +93,11 @@ class BoardData {
     }
 
     teamCanMove(isWhite) {
+        //check every piece of by color if it has any possible moves
         for (const piece of this.pieces) {
             if(piece.isWhite === isWhite) {
                 for (const move of piece.possibleMoves(this.pieces, false)) {
+                    //if there are any possible moves, return true
                     if(move.length > 0) {
                         return true;
                     }
@@ -122,7 +140,12 @@ class BoardData {
         }
     }
 
-    changeTurn() {
-        this.isWhiteTurn = !this.isWhiteTurn;
+    isMoveOrEatSpot(x, y, isMove, prevMoves) {
+        for (let i = 0; i < prevMoves[isMove ? 0 : 1].length; i+=2) {
+            if(prevMoves[isMove ? 0 : 1][i] === x && prevMoves[isMove ? 0 : 1][i+1] === y) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -9,7 +9,6 @@ function mainFunc() {
 }
 
 function clickedTD(event, x, y) {
-    //TODO: try to improve click handling again?
     let colorSelected = true;
     let prevSelectedPiece = boardData.getPiece(boardData.selected[0], boardData.selected[1]);
     let selectedPiece = boardData.getPiece(x, y);
@@ -19,21 +18,19 @@ function clickedTD(event, x, y) {
     //if last piece can keep eating
     if(boardData.keepPieceEating !== undefined) {
         //check if clicked spot is a eat spot
-        for (let i = 0; i < prevMoves[1].length; i+=2) {
-            if(prevMoves[1][i] === x && prevMoves[1][i+1] === y) {
-                boardData.eatPiece(prevSelectedPiece, x, y);
-                colorSelected = false;
-            }
+        if(boardData.isMoveOrEatSpot(x,y, false, prevMoves)) {
+            boardData.eatPiece(prevSelectedPiece, x, y);
+            colorSelected = false;
         }
 
-        //if didnt eat again:
+        //if didnt eat again: remove keepPieceEating
         if(colorSelected) {
-            //remove keepPieceEating
             boardData.keepPieceEating = undefined;
         }
 
         //check if there is no moves / pieces for the opposite color
         if(boardData.countPiecesByColor(!prevSelectedPiece.isWhite) === 0 || !boardData.teamCanMove(!prevSelectedPiece.isWhite)) {
+            boardData.setWinner();
             game.finishGame(prevSelectedPiece.isWhite);
         }
     }   //try to move the piece if there was selection before & there isnt a winner
@@ -42,41 +39,40 @@ function clickedTD(event, x, y) {
         boardData.keepPieceEating = undefined;
 
         //check if last clicked spot wasnt empty & piece color == turn color
-        if(prevMoves.length > 0 && prevSelectedPiece.isWhite === boardData.isWhiteTurn) { //check if clicked spot is a move spot
-            for (let i = 0; i < prevMoves[0].length; i+=2) {
-                if(prevMoves[0][i] === x && prevMoves[0][i+1] === y) {
-                    boardData.movePiece(prevSelectedPiece, x, y);
-                    colorSelected = false;
-                    boardData.changeTurn();
-                }
+        if(prevMoves.length > 0 && prevSelectedPiece.isWhite === boardData.isWhiteTurn) { 
+            //check if clicked spot is a move spot
+            if(boardData.isMoveOrEatSpot(x,y, true, prevMoves)) {
+                boardData.movePiece(prevSelectedPiece, x, y);
+                colorSelected = false;
+                boardData.changeTurn();
             }
 
             //check if clicked spot is a eat spot
-            for (let i = 0; i < prevMoves[1].length; i+=2) {
-                if(prevMoves[1][i] === x && prevMoves[1][i+1] === y) {
-                    boardData.eatPiece(prevSelectedPiece, x, y);
-                    colorSelected = false;
-                    boardData.changeTurn();
-                }
+            if(boardData.isMoveOrEatSpot(x,y, false, prevMoves)) {
+                boardData.eatPiece(prevSelectedPiece, x, y);
+                colorSelected = false;
+                boardData.changeTurn();
             }
 
             //check if there is no moves / pieces for the opposite color
             if(boardData.countPiecesByColor(!prevSelectedPiece.isWhite) === 0 || !boardData.teamCanMove(!prevSelectedPiece.isWhite)) {
+                boardData.setWinner();
                 game.finishGame(prevSelectedPiece.isWhite);
             }
         }
     }
-    //finish updating the board display based on click
+    //finish updating the board display based on click:
+    boardData.setSelected(x, y);
     if(boardData.keepPieceEating !== undefined) {
         game.finishFrame(event.currentTarget, true, x, y);
     } else if (selectedPiece !== undefined) {
+        //if the selected piece is same color as the current turn:
         if (selectedPiece.isWhite === boardData.isWhiteTurn) {
             game.finishFrame(event.currentTarget, colorSelected, x, y);
         } else {
-            //repaint the whole board
             game.finishFrame(event.currentTarget, false, x, y);
         }
-    } else { //if the currentTarget is not containing any piece
+    } else { //if the currentTarget doesnt contain any piece: repaint the board
         game.finishFrame(event.currentTarget, colorSelected, x, y);
     }
 }

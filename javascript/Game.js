@@ -35,11 +35,8 @@ class Game {
                 }
             }
         }
-
-        //place pieces pictures on the table
+        //place the pieces pictures and update the turn display based on who's first
         this.placePictures();
-
-        //update the turn display based on who's first
         this.updateTurnDisplay();
     }
 
@@ -55,6 +52,7 @@ class Game {
                 table.rows[y].cells[x].style.backgroundImage = "";
             }
         }
+
         this.placePictures();
     }
 
@@ -68,18 +66,17 @@ class Game {
     showMoves(x, y) {
         let posMoves = this.boardData.getMoves(x,y);
         const table = document.getElementById("checkers_table");
-        //paint possible moves on board
-        const tds = document.getElementsByTagName("td");
+        //if there are moves, paint them on the board
         if(posMoves.length > 0) {
             //possible moves
             for (let i = 0; i < posMoves[0].length; i+=2) {
                 table.rows[posMoves[0][i + 1]].cells[posMoves[0][i]].classList.add('moveSpot');
             }
             
-            // eat moves
+            //eat moves
             for (let i = 0; i < posMoves[1].length; i+=2) {
                 table.rows[posMoves[1][i + 1]].cells[posMoves[1][i]].classList.add('eatSpot');
-                //calc direction from click to move post to mark the spot between
+                //calc direction from click to move pos to mark the spot between
                 const directionToEat = this.boardData.calcDirection(this.boardData.getPiece(x, y), posMoves[1][i], posMoves[1][i + 1]);
                 table.rows[posMoves[1][i + 1] + directionToEat[1]].cells[posMoves[1][i] + directionToEat[0]].classList.add('dangerSpot');
             }
@@ -87,12 +84,8 @@ class Game {
     }
 
     finishFrame(currentTarget, paintSelected, x, y) {
-        this.boardData.selected[0] = x;
-        this.boardData.selected[1] = y;
-    
-        //repaint the whole board
+        //repaint the whole board and update the turn display
         this.repaintBoard();
-        
         this.updateTurnDisplay();
 
         if(paintSelected) {
@@ -105,13 +98,12 @@ class Game {
     }
 
     finishGame(isWhiteWinner) {
-        this.boardData.winner = true;
         const table = document.getElementById("checkers_table");
         const winnerPopup = document.createElement('div');
         table.appendChild(winnerPopup);
         winnerPopup.classList.add("winnerPopup");
 
-        if(isWhiteWinner) { //opposite because the turn is switched after moving
+        if(isWhiteWinner) { 
             winnerPopup.innerText = "White is the winner!";
             winnerPopup.style.color = "white";
         } else {
@@ -136,7 +128,8 @@ class Game {
             x = 0;
             y = 0;
         }
-        if(x < 7) { //continue in x direction
+        //continue in x direction
+        if(x < 7) { 
             x2--;
             x++;
         } else { //continue in y direction, reset x
@@ -153,6 +146,7 @@ class Game {
     updateTurnDisplay() {
         const turn_display = document.getElementById("turn_display");
         if(this.boardData.keepPieceEating !== undefined) {
+            //if player can keep eating and its white turn (it will be the extra move):
             if(this.boardData.isWhiteTurn) {
                 turn_display.innerText = "Black's Extra Move";
                 turn_display.classList.add('blackTurnDisplay');
