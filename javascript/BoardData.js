@@ -44,10 +44,10 @@ class BoardData {
     }
 
     //returns the general direction between two positions on the same axis
-    calcAxisGeneralDir(prev_x, x) {
-        if(prev_x - x > 0) {
+    calcAxisGeneralDir(prevX, x) {
+        if(prevX - x > 0) {
             return 1;
-        } else if(prev_x - x < 0) {
+        } else if(prevX - x < 0) {
             return -1;
         } else {
             return 0;

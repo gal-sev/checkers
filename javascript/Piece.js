@@ -20,9 +20,9 @@ class Piece {
         }
     }
     
-    pushPos(arr, x_move, y_move) {
-        arr.push(this.x + x_move);
-        arr.push(this.y + y_move);
+    pushPos(arr, xMove, yMove) {
+        arr.push(this.x + xMove);
+        arr.push(this.y + yMove);
     }
 
     //checks if the position is empty or contains anything
@@ -56,16 +56,16 @@ class Piece {
         return [movesPos, eatPos];
     }
 
-    detectionHandler(pieces, movesPos, eatPos, canEat, x_move, y_move) {
+    detectionHandler(pieces, movesPos, eatPos, canEat, xMove, yMove) {
         //if in bounds of board:
-        if(this.x + x_move >= 0 && this.x + x_move < 8 && this.y + y_move >= 0 && this.y + y_move < 8) {
-            switch (this.posContainsPiece(pieces, this.x + x_move, this.y + y_move)) {
+        if(this.x + xMove >= 0 && this.x + xMove < 8 && this.y + yMove >= 0 && this.y + yMove < 8) {
+            switch (this.posContainsPiece(pieces, this.x + xMove, this.y + yMove)) {
                 case 0:
                     //pos is empty so if we passed something to eat(canEat): push eat pos, else push move pos
                     if(canEat) {
-                        this.pushPos(eatPos, x_move, y_move);
+                        this.pushPos(eatPos, xMove, yMove);
                     } else {
-                        this.pushPos(movesPos, x_move, y_move);
+                        this.pushPos(movesPos, xMove, yMove);
                     }
                     return 0;
                 case 1:
@@ -83,10 +83,10 @@ class Piece {
         }
     }
 
-    getMovesInDirection(loop_length, x_multiplier, y_multiplier, pieces, movesPos, eatPos) {
+    getMovesInDirection(loopLength, xMultiplier, yMultiplier, pieces, movesPos, eatPos) {
         //x,y multipliers => -1 is move negative | 0 is dont move | 1 is move positive
-        for (let i = 1; i < loop_length; i++) {
-            const detection = this.detectionHandler(pieces, movesPos, eatPos, false , i * x_multiplier, i * y_multiplier);
+        for (let i = 1; i < loopLength; i++) {
+            const detection = this.detectionHandler(pieces, movesPos, eatPos, false , i * xMultiplier, i * yMultiplier);
             if(detection === 2) { 
                 //out of bounds or same color
                 break;
@@ -95,7 +95,7 @@ class Piece {
                 break;
             } else if(detection === 1) {
                 //if it detected enemy piece, check the cell behind it
-                this.detectionHandler(pieces, movesPos, eatPos, true, i * x_multiplier + 1 * x_multiplier, i * y_multiplier + 1 * y_multiplier);
+                this.detectionHandler(pieces, movesPos, eatPos, true, i * xMultiplier + 1 * xMultiplier, i * yMultiplier + 1 * yMultiplier);
                 break;
             }
         }

@@ -144,27 +144,27 @@ class Game {
     }
 
     updateTurnDisplay() {
-        const turn_display = document.getElementById("turn_display");
+        const turnDisplay = document.getElementById("turn_display");
         if(this.boardData.keepPieceEating !== undefined) {
             //if player can keep eating and its white turn (it will be the extra move):
             if(this.boardData.isWhiteTurn) {
-                turn_display.innerText = "Black's Extra Move";
-                turn_display.classList.add('blackTurnDisplay');
-                turn_display.classList.remove('whiteTurnDisplay');
+                turnDisplay.innerText = "Black's Extra Move";
+                turnDisplay.classList.add('blackTurnDisplay');
+                turnDisplay.classList.remove('whiteTurnDisplay');
             } else {
-                turn_display.innerText = "White's Extra Move";
-                turn_display.classList.add('whiteTurnDisplay');
-                turn_display.classList.remove('blackTurnDisplay');
+                turnDisplay.innerText = "White's Extra Move";
+                turnDisplay.classList.add('whiteTurnDisplay');
+                turnDisplay.classList.remove('blackTurnDisplay');
             }
         } else {
             if(!this.boardData.isWhiteTurn) {
-                turn_display.innerText = "Black's Move";
-                turn_display.classList.add('blackTurnDisplay');
-                turn_display.classList.remove('whiteTurnDisplay');
+                turnDisplay.innerText = "Black's Move";
+                turnDisplay.classList.add('blackTurnDisplay');
+                turnDisplay.classList.remove('whiteTurnDisplay');
             } else {
-                turn_display.innerText = "White's Move";
-                turn_display.classList.add('whiteTurnDisplay');
-                turn_display.classList.remove('blackTurnDisplay');
+                turnDisplay.innerText = "White's Move";
+                turnDisplay.classList.add('whiteTurnDisplay');
+                turnDisplay.classList.remove('blackTurnDisplay');
             }
         }
     }
