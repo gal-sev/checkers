@@ -14,13 +14,13 @@ class Game {
     
             for (let j = 0; j < numOfColumns; j++) {
                 const td = tr.insertCell(j);
-                if(i == 0) { //(first row - a to h)
+                if(i == 0) { // (First row - a to h)
                     const positionElement = document.createElement('h6');
                     positionElement.innerText = String.fromCharCode(65 + j); //65 is A in ascii
                     positionElement.classList.add('positionElementLetter');
                     td.appendChild(positionElement);
                 }
-                if(j == 0) { //(first column - 1 to 8)
+                if(j == 0) { // (First column - 1 to 8)
                     const positionElement = document.createElement('h6');
                     positionElement.innerText = i + 1;
                     positionElement.classList.add('positionElementNumber');
@@ -66,17 +66,17 @@ class Game {
     showMoves(x, y) {
         let posMoves = this.boardData.getMoves(x,y);
         const table = document.getElementById("checkers_table");
-        //if there are moves, paint them on the board
+        // If there are moves, paint them on the board
         if(posMoves.length > 0) {
-            //possible moves
+            // Possible moves
             for (let i = 0; i < posMoves[0].length; i+=2) {
                 table.rows[posMoves[0][i + 1]].cells[posMoves[0][i]].classList.add('moveSpot');
             }
             
-            //eat moves
+            // Eat moves
             for (let i = 0; i < posMoves[1].length; i+=2) {
                 table.rows[posMoves[1][i + 1]].cells[posMoves[1][i]].classList.add('eatSpot');
-                //calc direction from click to move pos to mark the spot between
+                // Calc direction from click to move pos in order to mark the spot between
                 const directionToEat = this.boardData.calcDirection(this.boardData.getPiece(x, y), posMoves[1][i], posMoves[1][i + 1]);
                 table.rows[posMoves[1][i + 1] + directionToEat[1]].cells[posMoves[1][i] + directionToEat[0]].classList.add('dangerSpot');
             }
@@ -84,15 +84,13 @@ class Game {
     }
 
     finishFrame(currentTarget, paintSelected, x, y) {
-        //repaint the whole board and update the turn display
+        // Repaint the whole board and update the turn display
         this.repaintBoard();
         this.updateTurnDisplay();
 
+        // Color and show moves for selected cell
         if(paintSelected) {
-            //color the current selected pixel
             currentTarget.classList.add('selected');
-                
-            //paint possible moves for selected piece
             this.showMoves(x, y);
         }
     }
@@ -114,39 +112,39 @@ class Game {
     }
 
     animateTable(game, x, y, x2, y2) {
-        //repaint the whole board
+        // Repaint the whole board
         game.repaintBoard();
         
         const table = document.getElementById("checkers_table");
         table.rows[y].cells[x].classList.add('selected');
         table.rows[y2].cells[x2].classList.add('selected');
 
-        //reset the selectors when at end of board
+        // Reset the selectors when at end of board
         if(x === 7 && y === 7) {
             x2 = 7;
             y2 = 7;
             x = 0;
             y = 0;
         }
-        //continue in x direction
+        // Continue in x direction
         if(x < 7) { 
             x2--;
             x++;
-        } else { //continue in y direction, reset x
+        } else { // Continue in y direction, reset x
             x2 = 7;
             x = 0;
             y++;
             y2--;
         }
 
-        //call the same function with a timeout
+        // Call the same function with a timeout
         setTimeout(() => {this.animateTable(game, x, y, x2, y2);}, 80);
     }
 
     updateTurnDisplay() {
         const turnDisplay = document.getElementById("turn_display");
         if(this.boardData.keepPieceEating !== undefined) {
-            //if player can keep eating and its white turn (it will be the extra move):
+            // If player can keep eating and its white turn (it will be the extra move):
             if(this.boardData.isWhiteTurn) {
                 turnDisplay.innerText = "Black's Extra Move";
                 turnDisplay.classList.add('blackTurnDisplay');

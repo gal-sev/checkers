@@ -10,7 +10,7 @@ table {
 
 td {
     display: flex;
-    position: relative; /* position is relative so we will be able to add the position marks */
+    position: relative; /* Position is relative so we will be able to add the position marks */
     background-repeat: no-repeat;
     background-position: center;
     background-size: 60px;

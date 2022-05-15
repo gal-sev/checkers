@@ -38,12 +38,12 @@ class BoardData {
         this.selected[1] = y;
     }
 
-    //returns general direction between two positions on the same plane
+    // Returns general direction between two positions on the same plane
     calcDirection(lastSelectedPiece, x, y) {
         return [this.calcAxisGeneralDir(lastSelectedPiece.x, x), this.calcAxisGeneralDir(lastSelectedPiece.y, y)];
     }
 
-    //returns the general direction between two positions on the same axis
+    // Returns the general direction between two positions on the same axis
     calcAxisGeneralDir(prevX, x) {
         if(prevX - x > 0) {
             return 1;
@@ -54,18 +54,16 @@ class BoardData {
         }
     }
 
+    // Removes the eaten piece, moves the current piece and changes the keep eating status
     eatPiece(prevSelectedPiece, x, y) {
-        //remove the eaten piece
         const directionToEat = this.calcDirection(prevSelectedPiece, x, y);
         this.removePiece(this.getPiece(x + directionToEat[0], y + directionToEat[1]));
-        //move the current piece
         this.movePiece(prevSelectedPiece, x, y);
-        //change the keep eating status
         this.keepPieceEating = this.canKeepEating(prevSelectedPiece);
     }
 
     canKeepEating(prevSelectedPiece) {
-        //check if there are possible eat spots, if yes then change keepPieceEating
+        // Check if there are possible eat spots, if yes then change keepPieceEating
         let posMoves = this.getMoves(prevSelectedPiece.x, prevSelectedPiece.y, true);
         if(posMoves.length > 0 && posMoves[1].length > 0) {
             return prevSelectedPiece;
@@ -76,7 +74,7 @@ class BoardData {
     movePiece(prevSelectedPiece, x, y) {
         prevSelectedPiece.x = x;
         prevSelectedPiece.y = y;
-        //promote the piece to a queen
+        // Promote the piece to a queen
         if((prevSelectedPiece.isWhite && y === 0) || (!prevSelectedPiece.isWhite && y === 7)) {
             prevSelectedPiece.isQueen = true;
         }
@@ -93,11 +91,10 @@ class BoardData {
     }
 
     teamCanMove(isWhite) {
-        //check every piece of by color if it has any possible moves
+        // Check every piece of pieces by color if it has any possible moves
         for (const piece of this.pieces) {
             if(piece.isWhite === isWhite) {
                 for (const move of piece.possibleMoves(this.pieces, false)) {
-                    //if there are any possible moves, return true
                     if(move.length > 0) {
                         return true;
                     }
@@ -109,7 +106,7 @@ class BoardData {
 
     getMoves(x, y, overrideKeepEating = false) {
         let output = [];
-        //get possible moves for piece
+        // Get possible moves for piece
         let piece = this.getPiece(x, y);
         if(piece != undefined) {
             piece.possibleMoves(this.pieces, this.keepPieceEating !== undefined || overrideKeepEating).forEach(move => {
@@ -140,9 +137,9 @@ class BoardData {
         }
     }
 
-    //checks if array contains the pos as a move or eat spot (based on isMove)
+    // Checks if array contains the pos as a move or eat spot (based on isMove)
     isMoveOrEatSpot(x, y, isMove, MovesArr) {
-        //isMove = true to check for move spots, false to check for eat spots
+        // isMove = true to check for move spots, false to check for eat spots
         for (let i = 0; i < MovesArr[isMove ? 0 : 1].length; i+=2) {
             if(MovesArr[isMove ? 0 : 1][i] === x && MovesArr[isMove ? 0 : 1][i+1] === y) {
                 return true;

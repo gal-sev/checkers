@@ -25,30 +25,30 @@ class Piece {
         arr.push(this.y + yMove);
     }
 
-    //checks if the position is empty or contains anything
+    // Checks if the position is empty or contains anything
     posContainsPiece(pieces, x, y) {
         for (const piece of pieces) {
             if(piece.x == x && piece.y == y) {
                 if (piece.isWhite == this.isWhite) {
-                    return 2; //same color
+                    return 2; // Same color
                 }
-                return 1; //other color piece
+                return 1; // Other color piece
             }
         }
-        return 0; //empty
+        return 0; // Empty
     }
 
     possibleMoves(pieces, isContinuousMove) {
         let movesPos = [];
         let eatPos = [];
-        //the if here is so the queen will be able to eat only nearby pieces on continuous turns
+        // The if here is so the queen will be able to eat only nearby pieces on continuous turns
         if(this.isQueen && !isContinuousMove) {
             this.getQueenPosMoves(pieces, movesPos, eatPos);
         } else {
             this.getPawnsPosMoves(pieces, movesPos, eatPos, isContinuousMove);
         }
 
-        //if there is an eat spot: empty the possible moves so the player could only eat
+        // If there is an eat spot: empty the possible moves so the player could only eat
         if(eatPos.length > 0) {
             movesPos = []; 
         }
@@ -57,11 +57,11 @@ class Piece {
     }
 
     detectionHandler(pieces, movesPos, eatPos, canEat, xMove, yMove) {
-        //if in bounds of board:
+        // If in bounds of board:
         if(this.x + xMove >= 0 && this.x + xMove < 8 && this.y + yMove >= 0 && this.y + yMove < 8) {
             switch (this.posContainsPiece(pieces, this.x + xMove, this.y + yMove)) {
                 case 0:
-                    //pos is empty so if we passed something to eat(canEat): push eat pos, else push move pos
+                    // Pos is empty so if we passed something to eat(canEat): push eat pos, else push move pos
                     if(canEat) {
                         this.pushPos(eatPos, xMove, yMove);
                     } else {
@@ -69,10 +69,10 @@ class Piece {
                     }
                     return 0;
                 case 1:
-                    //returns 1 because its an eatable piece
+                    // Return 1 because its an eatable piece
                     return 1;
                 case 2:
-                    //returns 2 because its the same color, does nothing
+                    // Return 2 because its the same color, does nothing
                     return 2;
                 default:
                     console.log('posContainsPiece out of bounds');
@@ -84,17 +84,17 @@ class Piece {
     }
 
     getMovesInDirection(loopLength, xMultiplier, yMultiplier, pieces, movesPos, eatPos) {
-        //x,y multipliers => -1 is move negative | 0 is dont move | 1 is move positive
+        // x,y multipliers => -1 is move negative | 0 is dont move | 1 is move positive
         for (let i = 1; i < loopLength; i++) {
             const detection = this.detectionHandler(pieces, movesPos, eatPos, false , i * xMultiplier, i * yMultiplier);
             if(detection === 2) { 
-                //out of bounds or same color
+                // Out of bounds or same color
                 break;
             } else if(detection === 0 && !this.isQueen) { 
-                //if its not a queen and its a move spot
+                // Not a queen and its a move spot
                 break;
             } else if(detection === 1) {
-                //if it detected enemy piece, check the cell behind it
+                // Detected enemy piece, check the cell behind it
                 this.detectionHandler(pieces, movesPos, eatPos, true, i * xMultiplier + 1 * xMultiplier, i * yMultiplier + 1 * yMultiplier);
                 break;
             }
@@ -125,7 +125,7 @@ class Piece {
     }
 
     getQueenPosMoves(pieces, movesPos, eatPos) {
-        //leaving ifs here for performance but it will work without them too (checks if its in bound)
+        // Leaving ifs here for performance but it will work without them too (checks if its in bound)
         if(this.y < 7 && this.x < 7) {
             // +x +y (diag down right)
             this.getMovesInDirection(Math.min(8 - this.x, 8 - this.y), 1, 1, pieces, movesPos, eatPos);
