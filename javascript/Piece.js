@@ -102,25 +102,15 @@ class Piece {
     }
 
     getPawnsPosMoves(pieces, movesPos, eatPos, isContinuous) {
-        if(isContinuous) {
-            // -x -y (diag up left)
-            this.getMovesInDirection(2, -1, -1, pieces, movesPos, eatPos);
-            // -x -y (diag up right)
-            this.getMovesInDirection(2, 1, -1, pieces, movesPos, eatPos);
-            // +x +y (diag down right)
-            this.getMovesInDirection(2, 1, 1, pieces, movesPos, eatPos);
-            // -x +y (diag down left)
-            this.getMovesInDirection(2, -1, 1, pieces, movesPos, eatPos);
-        } else if(this.isWhite) {
-            // -x -y (diag up left)
-            this.getMovesInDirection(2, -1, -1, pieces, movesPos, eatPos);
-            // -x -y (diag up right)
-            this.getMovesInDirection(2, 1, -1, pieces, movesPos, eatPos);
-        } else {
-            // +x +y (diag down right)
-            this.getMovesInDirection(2, 1, 1, pieces, movesPos, eatPos);
-            // -x +y (diag down left)
-            this.getMovesInDirection(2, -1, 1, pieces, movesPos, eatPos);
+        // Array directions: [up left, up right, down right, down left]
+        let posDirections = [[-1, -1], [1, -1], [1, 1], [-1, 1]];
+        for (let i = 0; i < posDirections.length; i++) {
+            if(!this.isWhite && i == 0 && !isContinuous) {
+                i = 2;
+            } else if (this.isWhite && i == 2 && !isContinuous) {
+                break;
+            }
+            this.getMovesInDirection(2, posDirections[i][0], posDirections[i][1], pieces, movesPos, eatPos);
         }
     }
 
